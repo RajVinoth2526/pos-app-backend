@@ -1,5 +1,4 @@
 ﻿using ClientAppPOSWebAPI.Models;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClientAppPOSWebAPI.Data
@@ -12,6 +11,8 @@ namespace ClientAppPOSWebAPI.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ThemeSettings> ThemeSettings { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
 
 

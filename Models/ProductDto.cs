@@ -13,10 +13,11 @@
         public int? StockQuantity { get; set; }
         public string? UnitType { get; set; } // e.g., volume, weight
         public string? Unit { get; set; } // e.g., pcs, kg
-        public double? UnitValue { get; set; } 
+        public double? UnitValue { get; set; }
         public float? TaxRate { get; set; } // percentage
         public float? DiscountRate { get; set; } // percentage
         public bool IsAvailable { get; set; }
+        public bool IsPartialAllowed { get; set; }
         public DateTime? ManufactureDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
         public DateTime? CreatedAt { get; set; }

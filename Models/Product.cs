@@ -18,6 +18,7 @@
         public float? TaxRate { get; set; } // percentage
         public float? DiscountRate { get; set; } // percentage
         public bool IsAvailable { get; set; }
+        public bool IsPartialAllowed { get; set; }
         public DateTime? ManufactureDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
         public DateTime? CreatedAt { get; set; }

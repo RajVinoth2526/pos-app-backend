@@ -52,17 +52,18 @@ namespace ClientAppPOSWebAPI.Controllers
 
         // GET: api/products
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] ProductFilterDto filters)
         {
-            var products = await _productManager.GetAllProductsAsync();
+            var pagedResult = await _productManager.GetAllProductsAsync(filters);
 
-            if (products == null || !products.Any())
+            if (pagedResult == null || !pagedResult.Items.Any())
             {
                 return NotFound(Result.FailureResult("No products found"));
             }
 
-            return Ok(Result.SuccessResult(products));
+            return Ok(Result.SuccessResult(pagedResult));
         }
+
 
         [Route("{id}")]
         [HttpPatch]

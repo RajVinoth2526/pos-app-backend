@@ -16,11 +16,11 @@ namespace ClientAppPOSWebAPI.Managers
         {
             return await _productService.GetProductByIdAsync(id);
         }
-
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<PagedResult<Product>> GetAllProductsAsync(ProductFilterDto filters)
         {
-            return await _productService.GetAllProductsAsync();
+            return await _productService.GetAllProductsAsync(filters);
         }
+
 
         public async Task<Product> AddProductAsync(Product product)
         {

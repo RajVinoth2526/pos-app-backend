@@ -12,6 +12,10 @@ builder.Services.AddScoped<ProductsManager>();
 
 builder.Services.AddScoped<ProductsService>();
 
+builder.Services.AddScoped<OrderManager>();
+
+builder.Services.AddScoped<OrderService>();
+
 builder.Services.AddScoped<SystemManager>();
 
 builder.Services.AddScoped<SystemService>();

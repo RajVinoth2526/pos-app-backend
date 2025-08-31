@@ -20,10 +20,29 @@ namespace ClientAppPOSWebAPI.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<PagedResult<Product>> GetAllProductsAsync(ProductFilterDto filters)
         {
-            return await _context.Products.ToListAsync();
+            var query = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filters.Name))
+            {
+                query = query.Where(p => EF.Functions.Like(p.Name.ToLower(), $"%{filters.Name.ToLower()}%"));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((filters.PageNumber - 1) * filters.PageSize)
+                .Take(filters.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<Product>
+            {
+                Items = items,
+                TotalCount = totalCount
+            };
         }
+
 
         public async Task<Product> AddProductAsync(Product product)
         {
@@ -63,6 +82,7 @@ namespace ClientAppPOSWebAPI.Services
             if (dto.ExpiryDate.HasValue) product.ExpiryDate = dto.ExpiryDate.Value;
             if (dto.CreatedAt.HasValue) product.CreatedAt = dto.CreatedAt.Value;
             if (dto.UpdatedAt.HasValue) product.UpdatedAt = dto.UpdatedAt.Value;
+            product.IsPartialAllowed = dto.IsPartialAllowed;
 
             await _context.SaveChangesAsync();
             return product;
