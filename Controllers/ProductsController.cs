@@ -56,9 +56,16 @@ namespace ClientAppPOSWebAPI.Controllers
         {
             var pagedResult = await _productManager.GetAllProductsAsync(filters);
 
-            if (pagedResult == null || !pagedResult.Items.Any())
+            // Always return 200 status, even if no products found
+            if (pagedResult == null)
             {
-                return NotFound(Result.FailureResult("No products found"));
+                pagedResult = new PagedResult<Product>
+                {
+                    Items = new List<Product>(),
+                    TotalCount = 0,
+                    Page = filters.PageNumber,
+                    PageSize = filters.PageSize
+                };
             }
 
             return Ok(Result.SuccessResult(pagedResult));

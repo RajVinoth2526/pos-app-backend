@@ -9,6 +9,7 @@ namespace ClientAppPOSWebAPI.Models
         public string? CustomerPhone { get; set; }
         public string? OrderStatus { get; set; }
         public string? PaymentStatus { get; set; }
+        public bool? IsDraft { get; set; } // Filter by draft status
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public decimal? MinTotal { get; set; }

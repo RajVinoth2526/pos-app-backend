@@ -15,6 +15,7 @@ namespace ClientAppPOSWebAPI.Models
         public string? PaymentMethod { get; set; }
         public string? PaymentStatus { get; set; }
         public string? OrderStatus { get; set; } // Pending, Processing, Completed, Cancelled
+        public bool IsDraft { get; set; } = false; // Indicates if order is a draft or final
         public string? Notes { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime? CompletedDate { get; set; }

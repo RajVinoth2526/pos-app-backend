@@ -54,3 +54,9 @@ The `.DateTime` property extracts the `DateTime` component from the `DateTimeOff
 - **DateTimeOffset**: `2025-08-28T23:59:59.000Z` (ISO 8601 with timezone)
 - **DateTime**: `2025-08-28` (Simple date format)
 - **Both formats are supported** for maximum flexibility
+
+
+
+
+
+

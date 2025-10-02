@@ -3,6 +3,7 @@ using System;
 using ClientAppPOSWebAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClientAppPOSWebAPI.Migrations
 {
     [DbContext(typeof(POSDbContext))]
-    partial class POSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250920174850_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -63,9 +65,6 @@ namespace ClientAppPOSWebAPI.Migrations
 
                     b.Property<string>("PaymentStatus")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDraft")
-                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("SubTotal")
                         .HasPrecision(18, 2)
@@ -134,119 +133,6 @@ namespace ClientAppPOSWebAPI.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
-                });
-
-            modelBuilder.Entity("ClientAppPOSWebAPI.Models.Invoice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("DiscountAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DueDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("InvoiceNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("InvoiceDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("SubTotal")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("TaxAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TermsAndConditions")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvoiceNumber")
-                        .IsUnique();
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("ClientAppPOSWebAPI.Models.InvoiceItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("DiscountAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ProductDescription")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("SubTotal")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("TaxAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.ToTable("InvoiceItems");
                 });
 
             modelBuilder.Entity("ClientAppPOSWebAPI.Models.Product", b =>
@@ -467,66 +353,6 @@ namespace ClientAppPOSWebAPI.Migrations
                     b.ToTable("UserSessions");
                 });
 
-            modelBuilder.Entity("ClientAppPOSWebAPI.Models.PasswordResetToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("IpAddress")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserAgent")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Token")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PasswordResetTokens");
-                });
-
-            modelBuilder.Entity("ClientAppPOSWebAPI.Models.Invoice", b =>
-                {
-                    b.HasOne("ClientAppPOSWebAPI.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("ClientAppPOSWebAPI.Models.InvoiceItem", b =>
-                {
-                    b.HasOne("ClientAppPOSWebAPI.Models.Invoice", "Invoice")
-                        .WithMany("InvoiceItems")
-                        .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Invoice");
-                });
-
             modelBuilder.Entity("ClientAppPOSWebAPI.Models.OrderItem", b =>
                 {
                     b.HasOne("ClientAppPOSWebAPI.Models.Order", null)
@@ -534,22 +360,6 @@ namespace ClientAppPOSWebAPI.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ClientAppPOSWebAPI.Models.PasswordResetToken", b =>
-                {
-                    b.HasOne("ClientAppPOSWebAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClientAppPOSWebAPI.Models.Invoice", b =>
-                {
-                    b.Navigation("InvoiceItems");
                 });
 
             modelBuilder.Entity("ClientAppPOSWebAPI.Models.Order", b =>

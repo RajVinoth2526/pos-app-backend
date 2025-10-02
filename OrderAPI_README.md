@@ -182,6 +182,7 @@ The Order API includes the following business logic:
 3. **Product Validation**: The system validates that all products in an order exist before creating the order
 4. **Default Status Assignment**: New orders are automatically assigned "Pending" status for both order and payment
 5. **Timestamp Management**: Creation and update timestamps are automatically managed
+6. **Automatic Stock Management**: Stock quantities are automatically reduced when orders are created and restored when orders are cancelled or deleted
 
 ## Error Handling
 
@@ -200,3 +201,28 @@ Common error scenarios:
 - Missing required order data
 - Order not found for updates/deletes
 - No orders found for filters
+
+## Stock Management
+
+### Automatic Stock Reduction
+When an order is successfully created, the system automatically reduces the stock quantity of each product by the ordered quantity.
+
+### Stock Restoration
+Stock quantities are automatically restored in the following scenarios:
+- **Order Cancellation**: When order status is changed to "Cancelled"
+- **Order Deletion**: When an order is deleted from the system
+
+### Stock Validation
+- The system checks if sufficient stock is available before reducing quantities
+- If stock reduction fails, the order is still created but a warning is logged
+- Stock restoration always succeeds (adds back to inventory)
+
+### Example Stock Flow
+```
+Product A: Initial Stock = 100
+Order Created: Quantity = 5
+→ Stock Reduced: 100 - 5 = 95
+
+Order Cancelled: Quantity = 5
+→ Stock Restored: 95 + 5 = 100
+```

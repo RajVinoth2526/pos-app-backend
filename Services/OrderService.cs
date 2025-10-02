@@ -42,6 +42,9 @@ namespace ClientAppPOSWebAPI.Services
             if (!string.IsNullOrEmpty(filters.PaymentStatus))
                 query = query.Where(o => o.PaymentStatus == filters.PaymentStatus);
 
+            if (filters.IsDraft.HasValue)
+                query = query.Where(o => o.IsDraft == filters.IsDraft.Value);
+
             // Handle date range filtering - support both DateTime and DateTimeOffset
             if (filters.StartDate.HasValue)
                 query = query.Where(o => o.OrderDate >= filters.StartDate.Value);
@@ -104,6 +107,48 @@ namespace ClientAppPOSWebAPI.Services
             return order;
         }
 
+        public async Task<Order?> ReplaceOrderAsync(int id, Order order)
+        {
+            var existingOrder = await _context.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.Id == id);
+            
+            if (existingOrder == null)
+                return null;
+
+            // Remove existing order items
+            _context.OrderItems.RemoveRange(existingOrder.OrderItems);
+
+            // Update order properties
+            existingOrder.CustomerId = order.CustomerId;
+            existingOrder.CustomerName = order.CustomerName;
+            existingOrder.CustomerPhone = order.CustomerPhone;
+            existingOrder.CustomerEmail = order.CustomerEmail;
+            existingOrder.SubTotal = order.SubTotal;
+            existingOrder.TaxAmount = order.TaxAmount;
+            existingOrder.DiscountAmount = order.DiscountAmount;
+            existingOrder.TotalAmount = order.TotalAmount;
+            existingOrder.PaymentMethod = order.PaymentMethod;
+            existingOrder.PaymentStatus = order.PaymentStatus;
+            existingOrder.OrderStatus = order.OrderStatus;
+            existingOrder.IsDraft = order.IsDraft;
+            existingOrder.Notes = order.Notes;
+            existingOrder.CompletedDate = order.CompletedDate;
+            existingOrder.UpdatedAt = DateTime.UtcNow;
+
+            // Add new order items
+            foreach (var orderItem in order.OrderItems)
+            {
+                orderItem.OrderId = id; // Ensure the OrderId is set correctly
+                _context.OrderItems.Add(orderItem);
+            }
+
+            await _context.SaveChangesAsync();
+            
+            // Return the updated order with items
+            return await GetOrderByIdAsync(id);
+        }
+
         public async Task<Order?> UpdateOrderAsync(int id, OrderDto dto)
         {
             var order = await _context.Orders.FindAsync(id);
@@ -140,6 +185,9 @@ namespace ClientAppPOSWebAPI.Services
 
             if (dto.OrderStatus != null)
                 order.OrderStatus = dto.OrderStatus;
+
+            if (dto.IsDraft.HasValue)
+                order.IsDraft = dto.IsDraft.Value;
 
             if (dto.Notes != null)
                 order.Notes = dto.Notes;

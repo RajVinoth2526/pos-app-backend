@@ -2,10 +2,10 @@
 {
     public class ProductDto
     {
-        public string Name { get; set; } = null!;
-        public string Description { get; set; }
+        public string? Name { get; set; } = null!;
+        public string? Description { get; set; }
         public string? Image { get; set; }
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
         public string? Sku { get; set; }
         public string? Barcode { get; set; }
         public string? Category { get; set; }
@@ -16,8 +16,8 @@
         public double? UnitValue { get; set; }
         public float? TaxRate { get; set; } // percentage
         public float? DiscountRate { get; set; } // percentage
-        public bool IsAvailable { get; set; }
-        public bool IsPartialAllowed { get; set; }
+        public bool? IsAvailable { get; set; }
+        public bool? IsPartialAllowed { get; set; }
         public DateTime? ManufactureDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
         public DateTime? CreatedAt { get; set; }
